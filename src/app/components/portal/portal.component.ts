@@ -5,7 +5,8 @@ import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AluCur, Alumno, Curso } from 'src/app/models/models';
 import { AlumnoService } from 'src/app/service/alumno.service';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.prod';
+
 import Swal from 'sweetalert2';
 
 @Component({
