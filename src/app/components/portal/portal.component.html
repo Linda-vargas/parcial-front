@@ -1,0 +1,323 @@
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 align-self-center">
+        <nav class="navbar navbar-light bg-light">
+            <div class="container-fluid">
+              <h2 class="text-center">Bienvenidos</h2>
+            </div>
+          </nav>
+      </div>
+    </div>
+    <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+      <li [ngbNavItem]="1">
+        <a ngbNavLink>Buscar Alumno</a>
+        <ng-template ngbNavContent>
+          <div class="card-header">Ingrese su código de alumno</div>
+              <div class="card-body text-primary">
+                <div class="row" *ngIf="isError">
+                  <div class="col-md-8">
+                    <div class="alert alert-danger" role="alert">
+                    {{mensaje}}
+                    </div>
+                  </div>
+                </div>
+                <div class="row" *ngIf="isLoad">
+                  <div class="col-md-8">
+                    <div class="alert alert-success" role="alert">
+                    Cargando
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-8">
+                      <input type="text" class="form-control"  [(ngModel)]="codigo" placeholder="Ingresar codigo de alumno" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                  </div>
+                  <div class="col-md-4">
+                      <button type="button" class="btn btn-primary" (click)="obtenerDatos()">Buscar</button>
+                  </div>
+                </div>
+                <h1 *ngIf="enabled">Datos del Alumno</h1>
+                <div class="row" *ngIf="enabled">
+                  <div class="col-md-8">
+                    <ul class="list-group">
+                      <li class="list-group-item">Código: {{data.alumno.codalu}}</li>
+                      <li class="list-group-item">Nombre: {{data.alumno.nomalu}}</li>
+                      <li class="list-group-item">Apellido: {{data.alumno.apealu}}</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-12" *ngIf="enabled">
+                  <button type="button" class="btn btn-primary" (click)="abrirModal(Agrenota)">Agregar</button>
+                </div>
+                <div class="row" *ngIf="enabled">
+                    <div class="col-md-8">
+                  <table class="table table-dark table-hover">
+                      <thead>
+                        <tr>
+                          <th scope="col">Codigo</th>
+                          <th scope="col">Nombre</th>
+                          <th scope="col">Credito</th>
+                          <th scope="col">Nota</th>
+                          <th scope="col">Opciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let dat of data.curso">
+                          <th scope="row">{{dat.codcur}}</th>
+                          <td>{{dat.nomcur}}</td>
+                          <td>{{dat.credito}}</td>
+                          <td>{{dat.nota}}</td>
+                          <td>
+                            <button type="button" class="btn btn-warning" (click)="abrirModalNota(Modnota,dat)">Modificar</button>
+                            <button type="button" class="btn btn-danger" (click)="eliminarCursoAlu(dat.codcur)">Eliminar</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="row" *ngIf="enabled ">
+                  <div class="col-md-8">
+                    <div class="alert alert-primary" role="alert">
+                    Promedio: {{promedio}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </ng-template>
+      </li>
+      <li [ngbNavItem]="2">
+        <a ngbNavLink>Alumnos</a>
+        <ng-template ngbNavContent>
+          <div class="col-md-12" >
+            <button type="button" class="btn btn-primary" (click)="abrirModal(alumno)">Agregar</button>
+          </div>
+          <div class="row" >
+              <div class="col-md-8">
+            <table class="table table-dark table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Codigo</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellido</th>
+                    <th scope="col">Opciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let date of alumnos">
+                    <th scope="row">{{date.codalu}}</th>
+                    <td>{{date.nomalu}}</td>
+                    <td>{{date.apealu}}</td>
+                    <td>
+                      <button type="button" class="btn btn-warning" (click)="abrirModalA(modificarA,date)">Modificar</button>
+                      <!-- <button type="button" class="btn btn-danger" (click)="eliminarCurso()">Eliminar</button> -->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </ng-template>
+      </li>
+      <li [ngbNavItem]="3">
+        <a ngbNavLink>Cursos</a>
+        <ng-template ngbNavContent>
+          <div class="col-md-12" >
+            <button type="button" class="btn btn-primary" (click)="abrirModal(content)">Agregar</button>
+          </div>
+          <div class="row" >
+              <div class="col-md-8">
+            <table class="table table-dark table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Codigo</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Credito</th>
+                    <th scope="col">Opciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let date of cursos">
+                    <th scope="row">{{date.codcur}}</th>
+                    <td>{{date.nomcur}}</td>
+                    <td>{{date.credito}}</td>
+                    <td>
+                      <button type="button" class="btn btn-warning" (click)="abrirModalM(modificar,date)">Modificar</button>
+                      <!-- <button type="button" class="btn btn-danger" (click)="eliminarAlu()">Eliminar</button> -->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </ng-template>
+      </li>
+    </ul>
+    
+    <div [ngbNavOutlet]="nav" class="mt-2"></div>
+    
+              
+            
+      
+    
+    
+  </div>
+<!-- CURSOS -->
+  <ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Agregar cursos</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="col-md-12">
+        <div class="input-group flex-nowrap" style="padding: 5px;">
+          <span class="input-group-text" id="addon-wrapping">Código</span>
+          <input type="text" class="form-control" placeholder="código" [(ngModel)]="curso.codcur" aria-label="código" aria-describedby="addon-wrapping">
+        </div>
+        <div class="input-group flex-nowrap" style="padding: 5px;">
+          <span class="input-group-text" id="addon-wrapping">Nombre</span>
+          <input type="text" class="form-control" placeholder="nombre" [(ngModel)]="curso.nomcur" aria-label="nombre" aria-describedby="addon-wrapping">
+        </div>
+        <div class="input-group flex-nowrap" style="padding: 5px;">
+          <span class="input-group-text" id="addon-wrapping">Crédito</span>
+          <input type="number" class="form-control" placeholder="credito" [(ngModel)]="curso.credito" aria-label="credito" aria-describedby="addon-wrapping">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="GuardarCurso()" (click)="d('Cross click')">Guardar</button>
+    </div>
+  </ng-template>
+
+  <ng-template #modificar let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Mofdificar cursos</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="col-md-12">
+        <div class="input-group flex-nowrap" style="padding: 5px;">
+          <span class="input-group-text" id="addon-wrapping">Código</span>
+          <input type="text" class="form-control" placeholder="código" [(ngModel)]="curso.codcur" aria-label="código" aria-describedby="addon-wrapping" disabled>
+        </div>
+        <div class="input-group flex-nowrap" style="padding: 5px;">
+          <span class="input-group-text" id="addon-wrapping">Nombre</span>
+          <input type="text" class="form-control" placeholder="nombre" [(ngModel)]="curso.nomcur" aria-label="nombre" aria-describedby="addon-wrapping">
+        </div>
+        <div class="input-group flex-nowrap" style="padding: 5px;">
+          <span class="input-group-text" id="addon-wrapping">Crédito</span>
+          <input type="number" class="form-control" placeholder="credito" [(ngModel)]="curso.credito" aria-label="credito" aria-describedby="addon-wrapping">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="GuardarE()">Guardar</button>
+    </div>
+  </ng-template>
+<!-- ALumnos -->
+<ng-template #alumno let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Agregar Alumno</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="col-md-12">
+      <div class="input-group flex-nowrap" style="padding: 5px;">
+        <span class="input-group-text" id="addon-wrapping">Código</span>
+        <input type="text" class="form-control" placeholder="código" [(ngModel)]="alumnoA.codalu" aria-label="código" aria-describedby="addon-wrapping">
+      </div>
+      <div class="input-group flex-nowrap" style="padding: 5px;">
+        <span class="input-group-text" id="addon-wrapping">Nombre</span>
+        <input type="text" class="form-control" placeholder="nombre" [(ngModel)]="alumnoA.nomalu" aria-label="nombre" aria-describedby="addon-wrapping">
+      </div>
+      <div class="input-group flex-nowrap" style="padding: 5px;">
+        <span class="input-group-text" id="addon-wrapping">Apellido</span>
+        <input type="text" class="form-control" placeholder="apellido" [(ngModel)]="alumnoA.apealu" aria-label="credito" aria-describedby="addon-wrapping">
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="GuardarAl()" (click)="d('Cross click')">Guardar</button>
+  </div>
+</ng-template>
+
+<ng-template #modificarA let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Modificar Alumno</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="col-md-12">
+      <div class="input-group flex-nowrap" style="padding: 5px;">
+        <span class="input-group-text" id="addon-wrapping">Código</span>
+        <input type="text" class="form-control" placeholder="código" [(ngModel)]="alumnoA.codalu" aria-label="código" aria-describedby="addon-wrapping" disabled>
+      </div>
+      <div class="input-group flex-nowrap" style="padding: 5px;">
+        <span class="input-group-text" id="addon-wrapping">Nombre</span>
+        <input type="text" class="form-control" placeholder="nombre" [(ngModel)]="alumnoA.nomalu" aria-label="nombre" aria-describedby="addon-wrapping">
+      </div>
+      <div class="input-group flex-nowrap" style="padding: 5px;">
+        <span class="input-group-text" id="addon-wrapping">Apellido</span>
+        <input type="text" class="form-control" placeholder="apellido" [(ngModel)]="alumnoA.apealu" aria-label="apellido" aria-describedby="addon-wrapping">
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="GuardarAlM()" (click)="d('Cross click')">Guardar</button>
+  </div>
+</ng-template>
+
+<!-- alu-cur -->
+<ng-template #Modnota let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Modificar Nota</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="col-md-12">
+      <div class="input-group flex-nowrap" style="padding: 5px;">
+        <span class="input-group-text" id="addon-wrapping">Nota</span>
+        <input type="number" class="form-control" placeholder="nota" [(ngModel)]="nota.nota" aria-label="nota" aria-describedby="addon-wrapping" >
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="GuardarNota()" (click)="d('Cross click')">Guardar</button>
+  </div>
+</ng-template>
+
+<ng-template #Agrenota let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Agregar Curso</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="col-md-12">
+      <select class="form-select" aria-label="Seleccionar" [(ngModel)]="codcurso">
+        <option selected disabled>Seleccionar</option>
+        <option *ngFor="let data of cursos" value="{{data.codcur}}">{{data.nomcur}}</option>
+      </select>
+      <div class="input-group flex-nowrap" style="padding: 5px;">
+        <span class="input-group-text" id="addon-wrapping">Nota</span>
+        <input type="number" class="form-control" placeholder="nota" [(ngModel)]="notaA" aria-label="nota" aria-describedby="addon-wrapping" >
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="GuardarAgreNot()" (click)="d('Cross click')">Guardar</button>
+  </div>
+</ng-template>
