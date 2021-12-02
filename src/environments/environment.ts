@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   // url:'https://practicaintegracion.herokuapp.com/'
-  url:'http://localhost:8080/'
+  url:'https://parcial-back-moqui.herokuapp.com/'
 };
 
 /*
